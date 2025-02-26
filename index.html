@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquiry Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            margin: 10px 0;
+        }
+
+        .checkbox-label {
+            font-weight: normal;
+            display: inline-block;
+            margin-right: 15px;
+        }
+
+        .section-label {
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Project Enquiry Form</h1>
+    
+    <form id="enquiryForm" action="https://service.capsulecrm.com/service/newlead" method="post">
+        <div class="form-group">
+            <label for="enquiryDate">Date</label>
+            <input type="date" id="enquiryDate" name="enquiryDate" required>
+            <input type="hidden" name="FORM_ID" value="1" />
+            <input type="hidden" name="COMPLETE_URL" value="http://localhost:3000/homepage.html" />
+        </div>
+
+        <div class="form-group">
+            <label for="FIRST_NAME">Contact Name</label>
+            <input type="text" id="FIRST_NAME" name="FIRST_NAME" required>
+        </div>
+        <div class="form-group">
+            <label for="LAST_NAME">Last Name</label>
+            <input type="text" id="LAST_NAME" name="LAST_NAME" required>
+        </div>
+
+        <div class="form-group">
+            <label for="companyName">Company Name</label>
+            <input type="text" id="companyName" name="companyName">
+        </div>
+
+        <div class="form-group">
+            <label for="EMAIL">Email Address</label>
+            <input type="text" id="EMAIL" name="EMAIL" required>
+        </div>
+
+        <div class="form-group">
+            <label for="PHONE">Contact Number</label>
+            <input type="text" id="PHONE" name="PHONE" required>
+        </div>
+
+
+
+        <button type="submit" style="margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Submit Enquiry
+        </button>
+    </form>
+
+    <script>
+        // Form submission handler
+        document.getElementById('enquiryForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Get form data and convert to URL encoded string
+            const formData = new FormData(this);
+            const urlEncodedData = new URLSearchParams(formData).toString();
+
+            // Send POST request to Capsule CRM service
+            fetch('https://service.capsulecrm.com/service/newlead', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: urlEncodedData
+            })
+            .then(response => {
+                if (response.ok) {
+                    // If successful, redirect to the COMPLETE_URL
+                    window.location.href = formData.get('COMPLETE_URL');
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting the form. Please try again.');
+            });
+        });
+
+        // Set default date to today
+        document.getElementById('enquiryDate').valueAsDate = new Date();
+    </script>
+</body>
+</html>
+
